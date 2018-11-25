@@ -5,11 +5,9 @@ import csv
 # Path to collect data from the Resources folder
 budgetdataCSV = os.path.join('Resources/budget_data.csv')
 
-dates = [] #this will store a list of the dates.
-total_amount = 0.00 #this will store the total amount of profit/loss
-
-amounts = [] 
-changes = [] #this will store the change 
+months = [] #this will store a list of dates.
+profits = [] #this will store a list of profit/loss amounts.
+changes = [] #this will store a lisf of values of change of profit between months
 
 # Read in the CSV file
 with open(budgetdataCSV, 'r') as csvfile:
@@ -24,46 +22,62 @@ with open(budgetdataCSV, 'r') as csvfile:
     # Loop through the data
     for row in csvreader:
 
-        dates.append(row[0])
-        total_amount += float(row[1])
-        amounts.append(float(row[1]))
+        months.append(row[0])
+        profits.append(float(row[1]))
+        #total_amount += float(row[1]) #I know I could sum the profit in here.. but I'll do it after. with the sum() function
+
+
+#The total number of months included in the dataset
+months_total = len(set(months))
+
+
+#The total net amount of "Profit/Losses" over the entire period
+total_amount = sum(profits)
+
+
+#The average change in "Profit/Losses" between months over the entire period
+    #the value change will reference the new month.. that's why month 1 is 0, month two change = month two - month one.
+changes.append(0) 
+for i in range(1,months_total):
+    changes.append(profits[i] - profits[i-1])
+
+    #ommiting the first value of the string that is 0 
+avg_change = sum(changes[1:]) / len(changes[1:])
+
+
+#The greatest increase in profits (date and amount) over the entire period
+max_index = 0
+
+for i in range(len(changes)):
+    if changes[i] > changes[max_index]:
+        max_index = i
+
+
+#The greatest decrease in losses (date and amount) over the entire period
+min_index = 0
+
+for i in range(len(changes)):
+    if changes[i] < changes[min_index]:
+        min_index = i
+
+
+
+#print results
 
 #Title
 print('\nFinancial Analysis\n------------------------------------')
-
-#The total number of months included in the dataset
-months = len(set(dates))
-print(f'Total Months: {months}')
-
-#The total net amount of "Profit/Losses" over the entire period
+print(f'Total Months: {months_total}')
 print(f'Total: ${total_amount:.2f}')
+print(f'Average Change: ${avg_change:.2f}')
+print(f'Greatest Increase in Profits: {months[max_index]} (${changes[max_index]:.2f})')
+print(f'Greatest Decrease in Profits: {months[min_index]} (${changes[min_index]:.2f})')
 
-#The average change in "Profit/Losses" between months over the entire period
-changes.append(0) #first month didn't have changes
-for i in range(1,months):
-    changes.append(amounts[i] - amounts[i-1])
 
-sum_changes = 0
-
-for i in changes:
-    sum_changes += i
-
-print(f'Average Change: ${sum_changes/(months-1):.2f}')
-
-#The greatest increase in profits (date and amount) over the entire period
-tmp_index = 0
-
-for i in range(len(changes)):
-    if changes[i] > changes[tmp_index]:
-        tmp_index = i
-
-print(f'Greatest Increase in Profits: {dates[tmp_index]} (${changes[tmp_index]:.2f})')
-
-#The greatest decrease in losses (date and amount) over the entire period
-tmp_index = 0
-
-for i in range(len(changes)):
-    if changes[i] < changes[tmp_index]:
-        tmp_index = i
-
-print(f'Greatest Decrease in Profits: {dates[tmp_index]} (${changes[tmp_index]:.2f})')
+with open("Financial_Analysis_Report.txt", "w") as text_file:
+    print('\nFinancial Analysis\n------------------------------------', file=text_file)
+    print(f'Total Months: {months_total}', file=text_file)
+    print(f'Total: ${total_amount:.2f}', file=text_file)
+    print(f'Average Change: ${avg_change:.2f}', file=text_file)
+    print(f'Greatest Increase in Profits: {months[max_index]} (${changes[max_index]:.2f})', file=text_file)
+    print(f'Greatest Decrease in Profits: {months[min_index]} (${changes[min_index]:.2f})', file=text_file)
+    #print(f"Purchase Amount: {TotalAmount}", file=text_file)
