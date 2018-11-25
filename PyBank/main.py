@@ -64,20 +64,19 @@ for i in range(len(changes)):
 
 #print results
 
-#Title
 print('\nFinancial Analysis\n------------------------------------')
 print(f'Total Months: {months_total}')
-print(f'Total: ${total_amount:.2f}')
-print(f'Average Change: ${avg_change:.2f}')
-print(f'Greatest Increase in Profits: {months[max_index]} (${changes[max_index]:.2f})')
-print(f'Greatest Decrease in Profits: {months[min_index]} (${changes[min_index]:.2f})')
+print(f'Total: ${total_amount:,.2f}')
+print(f'Average Change: ${avg_change:,.2f}')
+print(f'Greatest Increase in Profits: {months[max_index]} (${changes[max_index]:,.2f})')
+print(f'Greatest Decrease in Profits: {months[min_index]} (${changes[min_index]:,.2f})')
 
-
+#save results to a file
 with open("Financial_Analysis_Report.txt", "w") as text_file:
     print('\nFinancial Analysis\n------------------------------------', file=text_file)
     print(f'Total Months: {months_total}', file=text_file)
-    print(f'Total: ${total_amount:.2f}', file=text_file)
-    print(f'Average Change: ${avg_change:.2f}', file=text_file)
-    print(f'Greatest Increase in Profits: {months[max_index]} (${changes[max_index]:.2f})', file=text_file)
-    print(f'Greatest Decrease in Profits: {months[min_index]} (${changes[min_index]:.2f})', file=text_file)
+    print(f'Total: ${total_amount:,.2f}', file=text_file)
+    print(f'Average Change: ${avg_change:,.2f}', file=text_file)
+    print(f'Greatest Increase in Profits: {months[max_index]} (${changes[max_index]:,.2f})', file=text_file)
+    print(f'Greatest Decrease in Profits: {months[min_index]} (${changes[min_index]:,.2f})', file=text_file)
     #print(f"Purchase Amount: {TotalAmount}", file=text_file)
