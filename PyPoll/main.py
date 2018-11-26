@@ -7,6 +7,8 @@ electiondataCSV = os.path.join('Resources/election_data.csv')
 
 votes = 0.0
 
+votes_by_candidate = []
+
 # Read in the CSV file
 with open(electiondataCSV, 'r') as csvfile:
 
@@ -26,9 +28,6 @@ with open(electiondataCSV, 'r') as csvfile:
     
     candidates = set(tmp_candidates)
     
-    print('\nElection Results\n------------------------------------')
-    print(f'Total Votes: {votes:.0f}\n------------------------------------')
-
     tmp_count = 0 #count votes for each candidate
 
     ## this is not an optimal approach because I'm reading the file four times.. maybe a Dictionary?
@@ -40,47 +39,39 @@ with open(electiondataCSV, 'r') as csvfile:
             if row[2] == candidatename:
                 tmp_count += 1
 
+        votes_by_candidate.append((candidatename,tmp_count))
 
-        print(f'{candidatename}: {((tmp_count*100)/votes):.3f}% ({tmp_count})')
         tmp_count = 0
 
-
-    print('------------------------------------')
-
-    print(f'Winner: <Insert Candidate Name>\n------------------------------------')
-     
-
-
-
-#The total number of votes cast
-
-
-#A complete list of candidates who received votes
-
-
-
-#The percentage of votes each candidate won
-
-
-
-#The total number of votes each candidate won
-
-
-
-#The winner of the election based on popular vote.
-
-
-
+votes_by_candidate.sort(key=lambda x: x[1], reverse=True)
 
 
 #print results
 
+print('\nElection Results\n------------------------------------')
+print(f'Total Votes: {votes:.0f}\n------------------------------------')
+
+for candidate_i in votes_by_candidate:
+    print(f'{candidate_i[0]}: {( ( candidate_i[1]*100 ) / votes ):.3f}% ({candidate_i[1]})')
+print('------------------------------------')
+print(f'Winner: {votes_by_candidate[0][0]}')
+
+print('------------------------------------')
 
 
 
 #save results to a file
 with open("Election_Results_Report.txt", "w") as text_file:
     print('\nElection Results\n------------------------------------', file=text_file)
+    print(f'Total Votes: {votes:.0f}\n------------------------------------', file=text_file)
+
+    for candidate_i in votes_by_candidate:
+        print(f'{candidate_i[0]}: {( ( candidate_i[1]*100 ) / votes ):.3f}% ({candidate_i[1]})', file=text_file)
+        
+    print('------------------------------------', file=text_file)
+    print(f'Winner: {votes_by_candidate[0][0]}', file=text_file)
+    print('------------------------------------', file=text_file)
+    
 
 
 
@@ -96,7 +87,7 @@ Dict = {"candidate": 'Berns',
             },
             "total_votes": 136}
 
-print('\n\n')
+print('\n')
 print('Insights')
 print('------------------------------------')
 print(f'The Candidate {Dict["candidate"]} had a total voting of {Dict["total_votes"]}, Winning on Trandee by {Dict["countries"]["Trandee"]}.\n')
