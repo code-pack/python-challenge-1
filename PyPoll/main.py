@@ -5,25 +5,22 @@ import csv
 # Path to collect data from the Resources folder
 electiondataCSV = os.path.join('Resources/election_data.csv')
 
-
-profits = [] #this will store a list of profit/loss amounts.
-changes = [] #this will store a lisf of values of change of profit between months
 votes = 0.0
 
 # Read in the CSV file
 with open(electiondataCSV, 'r') as csvfile:
 
-    # Split the data on commas
+    # Split the data by commas
     csvreader = csv.reader(csvfile, delimiter=',')
 
     #Pass header
     csv_header = next(csvreader)
     #print(csv_header)
 
-    tmp_candidates = [] #this will store a set of dates.
+    tmp_candidates = [] #this will store a list of candidates
+    
     # Loop through the data
     for row in csvreader:
-
         tmp_candidates.append(row[2])
         votes += 1
     
@@ -32,18 +29,20 @@ with open(electiondataCSV, 'r') as csvfile:
     print('\nElection Results\n------------------------------------')
     print(f'Total Votes: {votes:.0f}\n------------------------------------')
 
-    count = 0
+    tmp_count = 0 #count votes for each candidate
+
+    ## this is not an optimal approach because I'm reading the file four times.. maybe a Dictionary?
     for candidatename in candidates:
         csvfile.seek(0)
 
         for row in csvreader:
 
             if row[2] == candidatename:
-                count += 1
+                tmp_count += 1
 
 
-        print(f'{candidatename}: {((count*100)/votes):.3f}% ({count})')
-        count = 0
+        print(f'{candidatename}: {((tmp_count*100)/votes):.3f}% ({tmp_count})')
+        tmp_count = 0
 
 
     print('------------------------------------')
@@ -82,3 +81,22 @@ with open(electiondataCSV, 'r') as csvfile:
 #save results to a file
 with open("Election_Results_Report.txt", "w") as text_file:
     print('\nElection Results\n------------------------------------', file=text_file)
+
+
+
+## Additional challenge for me..
+    #I want to show who won on wich country
+    #maybe I can define a dictionary
+
+Dict = {"candidate": 'Berns',
+            "countries": {
+                "March": 12,
+                "Queen": 34,
+                "Trandee": 90
+            },
+            "total_votes": 136}
+
+print('\n\n')
+print('Insights')
+print('------------------------------------')
+print(f'The Candidate {Dict["candidate"]} had a total voting of {Dict["total_votes"]}, Winning on Trandee by {Dict["countries"]["Trandee"]}.\n')
