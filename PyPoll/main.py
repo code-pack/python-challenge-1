@@ -30,7 +30,7 @@ with open(electiondataCSV, 'r') as csvfile:
     
     tmp_count = 0 #count votes for each candidate
 
-    ## this is not an optimal approach because I'm reading the file four times.. maybe a Dictionary?
+    ## this is not an optimal approach because I'm reading the file four times.. ask Rafa or Eduardo
     for candidatename in candidates:
         csvfile.seek(0)
 
@@ -91,3 +91,58 @@ print('\n')
 print('Insights')
 print('------------------------------------')
 print(f'The Candidate {Dict["candidate"]} had a total voting of {Dict["total_votes"]}, Winning on Trandee by {Dict["countries"]["Trandee"]}.\n')
+
+
+
+votes = 0.0
+
+votes_by_country = []
+
+# Read in the CSV file
+with open(electiondataCSV, 'r') as csvfile:
+
+    # Split the data by commas
+    csvreader = csv.reader(csvfile, delimiter=',')
+
+    #Pass header
+    csv_header = next(csvreader)
+    #print(csv_header)
+
+    tmp_countrys = [] #this will store a list of countrys
+    
+    # Loop through the data
+    for row in csvreader:
+        tmp_countrys.append(row[1])
+        votes += 1
+    
+    countrys = set(tmp_countrys)
+    
+    tmp_count = 0 #count votes for each country
+
+    ## this is not an optimal approach because I'm reading the file four times.. ask Rafa or Eduardo
+    for countryname in countrys:
+        csvfile.seek(0)
+
+        for row in csvreader:
+
+            if row[1] == countryname:
+                tmp_count += 1
+
+        votes_by_country.append((countryname,tmp_count))
+
+        tmp_count = 0
+
+votes_by_country.sort(key=lambda x: x[1], reverse=True)
+
+
+#print results
+
+print('\nElection Results\n------------------------------------')
+print(f'Total Votes: {votes:.0f}\n------------------------------------')
+
+for country_i in votes_by_country:
+    print(f'{country_i[0]}: {( ( country_i[1]*100 ) / votes ):.3f}% ({country_i[1]})')
+print('------------------------------------')
+print(f'Winner: {votes_by_country[0][0]}')
+
+print('------------------------------------')
