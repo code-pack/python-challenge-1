@@ -46,26 +46,10 @@ with open(electiondataCSV, 'r') as csvfile:
 votes_by_candidate.sort(key=lambda x: x[1], reverse=True)
 
 
-#print results
-
-print('\nElection Results\n------------------------------------')
-print(f'Total Votes: {votes:.0f}\n------------------------------------')
-
-for candidate_i in votes_by_candidate:
-    print(f'{candidate_i[0]}: {( ( candidate_i[1]*100 ) / votes ):.3f}% ({candidate_i[1]})')
-print('------------------------------------')
-print(f'Winner: {votes_by_candidate[0][0]}')
-
-print('------------------------------------')
-
-
-
-    
-
 
 
 ## Additional challenge for me..
-    #I want to show who won on wich country
+##I want to show votes by country
 
 
 votes = 0.0
@@ -109,25 +93,10 @@ with open(electiondataCSV, 'r') as csvfile:
 votes_by_country.sort(key=lambda x: x[1], reverse=True)
 
 
-#print results
-
-print('\n\nVotes by Country\n------------------------------------')
-
-for country_i in votes_by_country:
-    print(f'{country_i[0]}: {( ( country_i[1]*100 ) / votes ):.3f}% ({country_i[1]})')
-
-print('------------------------------------')
-print(f'Country with most voters: {votes_by_country[0][0]}')
-
-print('------------------------------------')
-
-
-
-
 
 ## Additional challenge for me..
-    #I want to show who won on wich country
-
+#I want to show who won on wich country
+#maybe I can define a dictionary to make this more efficient (ask Eduardo or Rafa)
 
 votes = 0.0
 
@@ -170,7 +139,33 @@ with open(electiondataCSV, 'r') as csvfile:
 votes_by_candcountry.sort(key=lambda x: x[1], reverse=True)
 
 
+
+
 #print results
+
+print('\nElection Results\n------------------------------------')
+print(f'Total Votes: {votes:.0f}\n------------------------------------')
+
+for candidate_i in votes_by_candidate:
+    print(f'{candidate_i[0]}: {( ( candidate_i[1]*100 ) / votes ):.3f}% ({candidate_i[1]})')
+print('------------------------------------')
+print(f'Winner: {votes_by_candidate[0][0]}')
+
+print('------------------------------------')
+
+
+
+print('\n\nVotes by Country\n------------------------------------')
+
+for country_i in votes_by_country:
+    print(f'{country_i[0]}: {( ( country_i[1]*100 ) / votes ):.3f}% ({country_i[1]})')
+
+print('------------------------------------')
+print(f'Country with most voters: {votes_by_country[0][0]}')
+
+print('------------------------------------')
+
+
 
 print('\n\nVotes by Country by Candidate\n------------------------------------')
 for country_i in votes_by_country:
@@ -182,7 +177,7 @@ for country_i in votes_by_country:
 print('\n------------------------------------')
 
 
-#maybe I can define a dictionary to make this more efficient (ask Eduardo or Rafa)
+
 
 
 
@@ -220,3 +215,14 @@ with open("Election_Results_Report.txt", "w") as text_file:
                 print(f'---> {candcountry_i[0][1]}: {( ( candcountry_i[1]*100 ) / country_i[1] ):.3f}% ({candcountry_i[1]})', file=text_file)
 
     print('\n------------------------------------', file=text_file)
+
+
+#print results to a csv file
+with open("Election_Results_Table.csv", "w") as my_csvfile:
+    print('Candidate,Country,Votes', file=my_csvfile)
+    for country_i in votes_by_country:
+        for candcountry_i in votes_by_candcountry:
+            if country_i[0] == candcountry_i[0][0] :
+                print(f'{candcountry_i[0][1]},{candcountry_i[0][0]},{candcountry_i[1]}', file=my_csvfile)
+
+print('CSV file generated at: /Election_Results_Table.csv')
