@@ -2,7 +2,9 @@ import os
 import csv
 
 # Path to collect data from the Resources folder
-txt_to_analyze = os.path.join('Resources/test.txt')
+filename = input('Introduce the name of the file to be analyzed: ')
+
+txt_to_analyze = os.path.join('Resources',filename)
 
 words_count = 0
 sentences_count = 0
@@ -14,7 +16,7 @@ with open(txt_to_analyze, 'r') as myfile:
     for line in myfile:
         #for word in line.replace('\n','').replace(',','').replace('-',' ').replace("'",' ').split():
         for word in line.split():
-            print(word)
+            #print(word)
 
             words_count += 1
             
@@ -25,6 +27,7 @@ with open(txt_to_analyze, 'r') as myfile:
 
 
 print('----------------------\nParagraph Analysis\n----------------------')
+print(f'FIle analyzed: {filename}')
 print(f'Approximate Word Count: {words_count}')
 print(f'Approximate Sentence Count: {sentences_count}')
 print(f'-> Letter Count: {letters_count}')
