@@ -30,3 +30,7 @@ Thumbs.db
 # Ignoring the reports because those are too heavy to be uploaded.
 
 #FolderName/
+
+#for the pycache
+*.pyc
+*.pyo
