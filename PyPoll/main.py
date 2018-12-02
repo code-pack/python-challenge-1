@@ -1,6 +1,10 @@
 
+#NOTE_ for all readers.. 
+### I decided to not only report votes by candidate, I also wanted to report Votes by STATE and also Votes by State by Candidate.
+
 import os
 import csv
+import operator
 
 def get_votes(electiondataCSV):
 
@@ -31,106 +35,106 @@ def get_votes(electiondataCSV):
     return my_dict
 
 
+def print_results(votes_dictionary):
+
+    total_votes = 0.0
+
+    for state in votes_dictionary:
+        total_votes += sum(votes_dictionary[state].values())
+
+    with open("Election_Results_Report.txt", "w") as text_file:
+
+        print('\nElection Results\n------------------------------------')
+        print('\nElection Results\n------------------------------------', file=text_file)
+        print(f'Total Votes: {total_votes:.0f}\n------------------------------------')
+        print(f'Total Votes: {total_votes:.0f}\n------------------------------------', file=text_file)
+
+        my_tmp_dic ={} 
+        for state in votes_dictionary:
+            for candidate in votes_dictionary[state]:
+                if candidate in my_tmp_dic:
+                    my_tmp_dic[candidate] += votes_dictionary[state][candidate]
+                else:
+                    my_tmp_dic[candidate] = votes_dictionary[state][candidate]
+
+        for candidate in my_tmp_dic:
+            print(f'{candidate}: {((my_tmp_dic[candidate]*100)/total_votes):.3f}% ({my_tmp_dic[candidate]})')
+            print(f'{candidate}: {((my_tmp_dic[candidate]*100)/total_votes):.3f}% ({my_tmp_dic[candidate]})', file=text_file)
+
+        winner = max(my_tmp_dic.items(), key=operator.itemgetter(1))[0]
+
+        print('------------------------------------')
+        print('------------------------------------', file=text_file)
+        print(f'Winner: {winner}')
+        print(f'Winner: {winner}', file=text_file)
+        print('------------------------------------')
+        print('------------------------------------', file=text_file)
+
+        print('\n\nVotes by Country\n------------------------------------')
+        print('\n\nVotes by Country\n------------------------------------', file=text_file)
+
+        #print votes by state
+
+        top_country = next(iter(votes_dictionary))
+
+        for state in votes_dictionary:
+            state_votes = sum(votes_dictionary[state].values())
+            top_state_votes = sum(votes_dictionary[top_country].values())
+            print(f'{state}: {((state_votes*100)/total_votes):.3f}% ({state_votes})')
+            print(f'{state}: {((state_votes*100)/total_votes):.3f}% ({state_votes})', file=text_file)
+            if top_state_votes < state_votes:
+                top_country = state
+
+        print('------------------------------------')
+        print('------------------------------------', file=text_file)
+        print(f'Country with most voters: {top_country}')
+        print(f'Country with most voters: {top_country}', file=text_file)
+        print('------------------------------------')
+        print('------------------------------------', file=text_file)
+
+        tmp_votes = 0.0
+        tmp_votes_b = 0.0
+
+        print('\n\nVotes by Country by Candidate\n------------------------------------')
+        print('\n\nVotes by Country by Candidate\n------------------------------------', file=text_file)
+        for state in votes_dictionary:
+            tmp_votes = sum(votes_dictionary[state].values())
+            print(f'\n{state}: {(tmp_votes*100)/total_votes:.3f}% ({tmp_votes})')
+            print(f'\n{state}: {(tmp_votes*100)/total_votes:.3f}% ({tmp_votes})', file=text_file)
+            for candidate in votes_dictionary[state]:
+                tmp_votes_b = votes_dictionary[state][candidate]
+                print(f'---> {candidate}: {( ( tmp_votes_b*100 ) / tmp_votes ):.3f}% ({tmp_votes_b})')
+                print(f'---> {candidate}: {( ( tmp_votes_b*100 ) / tmp_votes ):.3f}% ({tmp_votes_b})', file=text_file)
+
+        print('\n------------------------------------')
+        print('\n------------------------------------', file=text_file)
+
+    return
+
+
+def print_csv(my_dict):
+
+    with open("Election_Results_Table.csv", "w") as my_csvfile:
+        print('Candidate,State,Votes', file=my_csvfile)
+        for states in my_dict:
+            for candidates in my_dict[states]:
+                print(f'{candidates},{states},{my_dict[states][candidates]}', file=my_csvfile)
+
+    print('CSV file generated at: /Election_Results_Table.csv')
+
+    return
+
+
+##------------------------------------------------------##
 ## Main
+
 
 # Path to collect data from the Resources folder
 electiondataCSV = os.path.join('Resources/election_data.csv')
 
-votes_dictionary = get_votes(electiondataCSV)
+election_votes_dictionary = get_votes(electiondataCSV)
 
-total_votes = 0.0
-
-for state in votes_dictionary:
-    total_votes += sum(votes_dictionary[state].values())
-
-print('\nElection Results\n------------------------------------')
-print(f'Total Votes: {total_votes:.0f}\n------------------------------------')
-
-tmp_votes = 0.0
-my_tmp_dic ={} 
-for state in votes_dictionary:
-    for candidate in votes_dictionary[state]:
-        if candidate in my_tmp_dic:
-            my_tmp_dic[candidate] += votes_dictionary[state][candidate]
-        else:
-            my_tmp_dic[candidate] = votes_dictionary[state][candidate]
-
-for candidate in my_tmp_dic:
-    print(f'{candidate}: {((my_tmp_dic[candidate]*100)/total_votes):.3f}% ({my_tmp_dic[candidate]})')
-
-print('------------------------------------')
-print(f'Winner: falta')
-print('------------------------------------')
-
-print('\n\nVotes by Country\n------------------------------------')
-
-
-#print votes by state
-tmp_votes = 0.0
-
-for state in votes_dictionary:
-    tmp_votes = sum(votes_dictionary[state].values())
-    print(f'{state}: {((tmp_votes*100)/total_votes):.3f}% ({tmp_votes})')
-
-print('------------------------------------')
-print(f'Country with most voters: falta')
-print('------------------------------------')
-
-tmp_votes = 0.0
-tmp_votes_b = 0.0
-
-print('\n\nVotes by Country by Candidate\n------------------------------------')
-for state in votes_dictionary:
-    tmp_votes = sum(votes_dictionary[state].values())
-    print(f'\n{state}: {(tmp_votes*100)/total_votes:.3f}% ({tmp_votes})')
-    for candidate in votes_dictionary[state]:
-        tmp_votes_b = votes_dictionary[state][candidate]
-        print(f'---> {candidate}: {( ( tmp_votes_b*100 ) / tmp_votes ):.3f}% ({tmp_votes_b})')
-
-print('\n------------------------------------')
-
-
-
-'''
-
-
-#save results to a file
-with open("Election_Results_Report.txt", "w") as text_file:
-    print('\nElection Results\n------------------------------------', file=text_file)
-    print(f'Total Votes: {total_votes:.0f}\n------------------------------------', file=text_file)
-
-    for candidate_i in unique_candidates_votes:
-        print(f'{candidate_i[0]}: {( ( candidate_i[1]*100 ) / total_votes ):.3f}% ({candidate_i[1]})', file=text_file)
-    print('------------------------------------', file=text_file)
-    print(f'Winner: {unique_candidates_votes[0][0]}', file=text_file)
-
-    print('------------------------------------', file=text_file)
-
-    print('\n\nVotes by Country\n------------------------------------', file=text_file)
-
-    for country_i in unique_countries_votes:
-        print(f'{country_i[0]}: {( ( country_i[1]*100 ) / total_votes ):.3f}% ({country_i[1]})', file=text_file)
-
-    print('------------------------------------', file=text_file)
-    print(f'Country with most voters: {unique_countries_votes[0][0]}', file=text_file)
-
-    print('------------------------------------', file=text_file)
-
-    print('\n\nVotes by Country by Candidate\n------------------------------------', file=text_file)
-    for country_i in unique_countries_votes:
-        print(f'\n{country_i[0]}: {( ( country_i[1]*100 ) / total_votes ):.3f}% ({country_i[1]})', file=text_file)
-        for candcountry_i in votes_by_candcountry:
-            if country_i[0] == candcountry_i[1] :
-                print(f'---> {candcountry_i[0]}: {( ( candcountry_i[2]*100 ) / country_i[1] ):.3f}% ({candcountry_i[2]})', file=text_file)
-
-    print('\n------------------------------------', file=text_file)
+print_results(election_votes_dictionary)
 
 #print results to a csv file
-with open("Election_Results_Table.csv", "w") as my_csvfile:
-    print('Candidate,Country,Votes', file=my_csvfile)
-    for candcountry_i in votes_by_candcountry:
-        print(f'{candcountry_i[0]},{candcountry_i[1]},{candcountry_i[2]}', file=my_csvfile)
-
-print('CSV file generated at: /Election_Results_Table.csv')
-
-'''
+print_csv(election_votes_dictionary)
