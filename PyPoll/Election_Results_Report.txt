@@ -12,7 +12,7 @@ Winner: Khan
 ------------------------------------
 
 
-Votes by Country
+Votes by State
 ------------------------------------
 Marsh: 64.355% (2265957)
 Queen: 19.801% (697203)
@@ -20,11 +20,11 @@ Bamoo: 9.902% (348658)
 Trandee: 2.971% (104617)
 Raffah: 2.970% (104566)
 ------------------------------------
-Country with most voters: Marsh
+State with most voters: Marsh
 ------------------------------------
 
 
-Votes by Country by Candidate
+Votes by State by Candidate
 ------------------------------------
 
 Marsh: 64.355% (2265957)

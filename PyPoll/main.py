@@ -70,33 +70,33 @@ def print_results(votes_dictionary):
         print('------------------------------------')
         print('------------------------------------', file=text_file)
 
-        print('\n\nVotes by Country\n------------------------------------')
-        print('\n\nVotes by Country\n------------------------------------', file=text_file)
+        print('\n\nVotes by State\n------------------------------------')
+        print('\n\nVotes by State\n------------------------------------', file=text_file)
 
         #print votes by state
 
-        top_country = next(iter(votes_dictionary))
+        top_state = next(iter(votes_dictionary))
 
         for state in votes_dictionary:
             state_votes = sum(votes_dictionary[state].values())
-            top_state_votes = sum(votes_dictionary[top_country].values())
+            top_state_votes = sum(votes_dictionary[top_state].values())
             print(f'{state}: {((state_votes*100)/total_votes):.3f}% ({state_votes})')
             print(f'{state}: {((state_votes*100)/total_votes):.3f}% ({state_votes})', file=text_file)
             if top_state_votes < state_votes:
-                top_country = state
+                top_state = state
 
         print('------------------------------------')
         print('------------------------------------', file=text_file)
-        print(f'Country with most voters: {top_country}')
-        print(f'Country with most voters: {top_country}', file=text_file)
+        print(f'State with most voters: {top_state}')
+        print(f'State with most voters: {top_state}', file=text_file)
         print('------------------------------------')
         print('------------------------------------', file=text_file)
 
         tmp_votes = 0.0
         tmp_votes_b = 0.0
 
-        print('\n\nVotes by Country by Candidate\n------------------------------------')
-        print('\n\nVotes by Country by Candidate\n------------------------------------', file=text_file)
+        print('\n\nVotes by State by Candidate\n------------------------------------')
+        print('\n\nVotes by State by Candidate\n------------------------------------', file=text_file)
         for state in votes_dictionary:
             tmp_votes = sum(votes_dictionary[state].values())
             print(f'\n{state}: {(tmp_votes*100)/total_votes:.3f}% ({tmp_votes})')
